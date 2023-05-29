@@ -12,5 +12,5 @@
   - Base completa: São as 190 variáveis
   - Base Carlos Alberto: São as 38 variáveis selecionadas pelo aluno
   - Base CFS: ??? (Base menor - 23 variáveis)
-  - Base RELIEF F: (Base média - 140 variáveis)
+  - Base RELIEF F: ??? (Base média - 140 variáveis)
 - Não foi feita seleção de variáveis. Apenas lançou a base com as 38 selecionadas.
