@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from models.mlp_model import mlp_model, report
 from preprocessing.bases_variables import CARLOS_ALBERTO
@@ -8,6 +9,10 @@ from preprocessing.sampling import mount_unbalanced_base, smote_equalizer
 from preprocessing.transforming import transform_data
 from sklearn.cluster import DBSCAN
 from sklearn.neighbors import NearestNeighbors
+
+import mrmr
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
 
 
 def original_calls(basecsv):
@@ -203,6 +208,46 @@ def dbscan_remove_outliers(_df, _variables):
     print(len(outliers_continuas))
 
 
+# Realiza a normalização pelo método selecionado
+def normalize(_df, norm_type="MIN_MAX"):
+    scaler = None
+
+    if norm_type == 'MIN_MAX':
+        scaler = MinMaxScaler()
+    elif norm_type == 'Z-SCORE':
+        scaler = StandardScaler()
+
+    return pd.DataFrame(scaler.fit_transform(_df))
+
+
+# Seleção de variáveis
+def variable_selection(_df, selection_type='mrmr', number_of_features=30):
+    # TODO Para o mrmr usar somente as contínuas
+    # TODO Para o chi2 usar binárias e discretas
+    # TODO Retirar o if, pq eu terei de usar os dois métodos
+    # TODO Mudar o número de seleção de variáveis. Definir quantas quero de cada tipo
+    X = _df.iloc[:, 0:-1]
+    y = _df.iloc[:, -1]
+
+    if selection_type == 'mrmr':
+        # Input contínua/Saída discreta
+        # TODO tenho que selecionar somente as colunas contínuas
+        return mrmr.mrmr_classif(X, y, K=number_of_features)
+    if selection_type == 'chi2':
+        # Input discreta/Saída discreta
+        # TODO usar o chi quadrado para todas as outras
+        test = SelectKBest(score_func=chi2, k=number_of_features)
+        fit = test.fit(X, y)
+
+        np.set_printoptions(precision=3)
+        print(fit.scores_)
+
+        features = fit.transform(X)
+        print(features.columns)
+    else:
+        print('Método não reconhecido')
+        return None
+
 
 if __name__ == '__main__':
     # Lendo a base de dados e agregando os valores da classe em churn e no-churn
@@ -226,5 +271,18 @@ if __name__ == '__main__':
     # Imprimir quantidades de variáveis
     print_variables(variables)
 
+    # Remover inconsistências
+    # WEKA?
+
+    # Normalização pelo min_max para não retirar os outliers
+    # df = normalize(df)
+
+    # Seleção de variáveis pelos métodos mRMR e chi2
+    variable_selection(df)
+
     # Removendo outliers pelo DBSCAN
-    dbscan_remove_outliers(df, variables)
+    # dbscan_remove_outliers(df, variables)
+
+    print(df)
+
+
