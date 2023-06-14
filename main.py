@@ -13,6 +13,7 @@ from sklearn.neighbors import NearestNeighbors
 import mrmr
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
+from ReliefF import ReliefF
 
 
 def original_calls(basecsv):
@@ -221,32 +222,32 @@ def normalize(_df, norm_type="MIN_MAX"):
 
 
 # Seleção de variáveis
-def variable_selection(_df, selection_type='mrmr', number_of_features=30):
-    # TODO Para o mrmr usar somente as contínuas
-    # TODO Para o chi2 usar binárias e discretas
-    # TODO Retirar o if, pq eu terei de usar os dois métodos
-    # TODO Mudar o número de seleção de variáveis. Definir quantas quero de cada tipo
-    X = _df.iloc[:, 0:-1]
-    y = _df.iloc[:, -1]
+def variable_selection(_df, _variables, number_of_features=30):
+    x_continuas = _df[_variables['num_continuous']]
+    x_discretas = _df[_variables['num_discrete'] + _variables['binary']]
+    y = _df[_variables['output']]
 
-    if selection_type == 'mrmr':
-        # Input contínua/Saída discreta
-        # TODO tenho que selecionar somente as colunas contínuas
-        return mrmr.mrmr_classif(X, y, K=number_of_features)
-    if selection_type == 'chi2':
-        # Input discreta/Saída discreta
-        # TODO usar o chi quadrado para todas as outras
-        test = SelectKBest(score_func=chi2, k=number_of_features)
-        fit = test.fit(X, y)
+    # mRMR para entradas contínuas com saída discreta
+    # Instalar
+    # pip install mrmr_selection
+    # pip install polars
+    print(f'mRMR: {mrmr.mrmr_classif(x_continuas, y, K=number_of_features)}\n\n')
 
-        np.set_printoptions(precision=3)
-        print(fit.scores_)
+    # chi2 para entradas discretas positivas com saída discreta
+    # Tem valores negativos nas discretas que eu não posso utilizar no chi2
+    # print('chi2:')
+    # test = SelectKBest(score_func=chi2, k=number_of_features)
+    # fit = test.fit(x_discretas, y)
+    # np.set_printoptions(precision=3)
+    # print(fit.scores_)
+    # features = fit.transform(x_discretas)
+    # print(features.columns)
 
-        features = fit.transform(X)
-        print(features.columns)
-    else:
-        print('Método não reconhecido')
-        return None
+    # ReliefF
+    fs = ReliefF(n_neighbors=20, n_features_to_keep=number_of_features)
+    # TODO transformar a x_discretas e o y para array para usar no relief
+    # TODO imprimir o X_train
+    X_train = fs.fit_transform(x_discretas, y)
 
 
 if __name__ == '__main__':
@@ -278,7 +279,7 @@ if __name__ == '__main__':
     # df = normalize(df)
 
     # Seleção de variáveis pelos métodos mRMR e chi2
-    variable_selection(df)
+    variable_selection(df, variables)
 
     # Removendo outliers pelo DBSCAN
     # dbscan_remove_outliers(df, variables)
