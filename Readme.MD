@@ -27,7 +27,7 @@
   - Treinar os modelos com cross-validation (k-fold)
     - OK - XGBoost
       - Verificar o cross-validation quando fizer com o SVM
-    - SVM
+    - PAREI AQUI - SVM
     - SVM com AdaBoost
   - Verificar o desempenho com a matriz de confução
     - Acurácia
