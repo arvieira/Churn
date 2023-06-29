@@ -24,16 +24,41 @@
   - OK - Separar as variáveis de entrada e saída
   - OK - Balancear a base com undersampling aleatório para ter um V0
   - OK - Separar a base em 70/30 treino e teste
-  - Treinar os modelos com cross-validation (k-fold)
+  - OK - Treinar os modelos
     - OK - XGBoost
-      - Verificar o cross-validation quando fizer com o SVM
-    - PAREI AQUI - SVM
-    - SVM com AdaBoost
-  - Verificar o desempenho com a matriz de confução
-    - Acurácia
-    - Precision
-    - Recall
-    - F-score
+    - OK - SVM
+    - OK - SVM com AdaBoost
+  - OK - Verificar o desempenho com a matriz de confução
+    - OK - Acurácia
+    - OK - Precision
+    - OK - Recall
+    - OK - F-score
+  - RESULTADOS EM ACURÁCIA:
+    - XGBoost 0.57413
+    - SVM 0.49872
+    - SVM com Adaboost 0.50201
+
+- TODO: Verificar o evaluate. A matriz de confusão não está mostrando resultados balanceados. Será que tinha que
+mostrar balanceado o que é real de cada classe? Verificar o y_real para ver se as classes estão balanceadas.
+- TODO: Ver se eu posso avaliar os modelos pelo teste mesmo ou se tinha que usar validação.
+    
 - Segunda fase (Comparar os resultados a cada etapa com a primeira fase)
   - Aplicar os préprocessamentos já feitos
-  - Utilizar Tomek link para o undersampling
+    - OK - Missing Values: Não tinha
+    - OK - Análise exploratória: Removeu linhas e colunas de (82618, 190) para (64292, 177), mas sem efeito no 
+    resultado dos modelos
+    - OK - Remoção de variáveis com mais de 40% de zeros, sem contar as binárias: Removeu colunas de (64292, 177) 
+    para (64292, 120), mas sem efeito no resultado dos modelos
+    - OK - Normalizar com o MinMax pq eu não removi os outliers ainda: Aparentemente melhorou um pouco, mas 
+    tem que confirmar
+    - Fazer seleção de variáveis
+    - Remover outliers
+    - Remover inconsistências
+  - OK - Utilizar Tomek link para o undersampling
+    - OK - Obteve uma melhora para o XGBoost e para o SVM. O SVM com AdaBoost ainda não está funcionando direito
+    - RESULTADOS EM ACURÁCIA:
+      - XGBoost 0.64227
+      - SVM 0.55546
+      - SVM com AdaBoost indicou que o weak learner ainda é pior que o aleatório
+  - Usar o GridSearchCV para busca de hyperparâmetros
+    - O CV do GridSearch já possui o cross-validation
