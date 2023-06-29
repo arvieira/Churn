@@ -1,289 +1,119 @@
-import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-
-from models.mlp_model import mlp_model, report
-from preprocessing.bases_variables import CARLOS_ALBERTO
-from preprocessing.sampling import mount_unbalanced_base, smote_equalizer
-from preprocessing.transforming import transform_data
-from sklearn.cluster import DBSCAN
-from sklearn.neighbors import NearestNeighbors
-
-import mrmr
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import chi2
-from ReliefF import ReliefF
+from imblearn.under_sampling import RandomUnderSampler
+from sklearn.metrics import confusion_matrix
+from sklearn import metrics
+from sklearn.model_selection import train_test_split
+from xgboost import XGBClassifier, cv
+import xgboost as xgb
 
 
-def original_calls(basecsv):
-    # Selecionando as colunas referentes ao trabalho Carlos Alberto
-    dataset = basecsv[CARLOS_ALBERTO]
-    df = dataset.describe()
-    # print(dataset.describe())
-    # print(dataset.columns)
-
-    # Montando a base para rodar
-    base = mount_unbalanced_base(dataset)
-
-    # Separando as variáveis de entrada e a de saída
-    X, y = base.iloc[:, 1:38], base.iloc[:, 0]
-    # print(f'y:{Y}')
-
-    # Transformações dos dados
-    X_train, X_test, y_train, y_test = transform_data(X, y)
-
-    # Equalizando com SMOTE
-    X_train, y_train = smote_equalizer(X_train, y_train)
-
-    # Imprimindo a distribuição
-    # print('y_train class distribution')
-    # print(y_train.value_counts(normalize=True))
-    # print('y_test class distribution')
-    # print(y_test.value_counts(normalize=True))
-
-    # Guardando as divisões na variável data_sets
-    data_sets = [(X_train, y_train), (X_test, y_test)]
-
-    # Usando classificador de churn com MLP (Multilayer Perceptron)
-    name = ['Classificador de Churn - MLP']
-    grid_search_model = mlp_model(data_sets, name, X, y)
-    results = pd.DataFrame(grid_search_model.cv_results_)
-    results = results.sort_values(by='rank_test_score', ascending=False)
-    print('results mean_test_score', results['mean_test_score'].round(3).head())
-    print('results std_test_score', results['std_test_score'].round(3).head())
-    report(results.cv_results_)
+# Semente utilizada para reprodutibilidade de experimentos
+SEED = 7457854
 
 
 # Lê a base de dados, cria a coluna de churn e no-churn como detratores
+# Criando a coluna detratores
+# Essa coluna será:
+# 1 - churn
+# 0 - no-churn
 def read_database(filename):
-    # Lendo a base de dados
-    _df = pd.read_csv(filename, sep=',')
+    print("-> Lendo a base de dados e mapeando classes...")
 
-    # Criando a coluna detratores
-    # Essa coluna será:
-    # 1 - churn
-    # 0 - no-churn
-    #
+    # Lendo a base
+    df = pd.read_csv(filename, sep=',')
+
     # O atributo classe pode receber três valores: 0, 1 e 2
-    # somente os 0s são detratores e geram churn. 1 e 2 são no-churn
-    _df['classe'] = _df['classe'].map(lambda x: 1 if x == 0 else 0)
+    # somente os 0s são detratores e geram churn. Os números 1 e 2 são no-churn
+    df['classe'] = df['classe'].map(lambda x: 1 if x == 0 else 0)
 
-    return _df
-
-
-# Procura por missing_values e retorna true se encontrar
-def missing_values(_df):
-    # Verifica se tem algum NaN ou Null no dataframe
-    return _df.isna().any().any() or _df.isnull().any().any()
+    return df
 
 
-# Serve para realizar uam análise exploratória e retirar linhas e colunas problemáticas da base
-def exploratory_data_analysis(_df):
-    # LINHAS:
-    # A coluna safra_geracao só possui dois valores possíveis 0 e 201907.
-    # As linhas que apresentam 0 aqui, também apresentam zeros em várias outras colunas na forma de um padrão.
-    # Podemos descartar as linhas com safra_geracao 0 e, posteriormente, a própria coluna safra_geracao
-    indexes = list(_df.loc[_df['safra_geracao'] == 0].index)
+# Balanceia a base com o algoritmo escolhido
+def balance(df_X, df_y, alg='random'):
+    print(f"-> Baleanceando a base. Método escolhido: {alg}...")
 
-    # Procurando por linhas que são zeros de ponta a ponta para remover
-    indexes = indexes + list(_df.loc[(_df == 0).all(axis=1)].index)
+    if alg == 'random':
+        undersampler = RandomUnderSampler(sampling_strategy='majority')
+        df_X, df_y = undersampler.fit_resample(df_X, df_y)
+    else:
+        print('Algoritmo de sampling não conhecido')
 
-    # Removendo linhas problemáticas
-    _df = _df.drop(indexes)
-
-    # COLUNAS
-    # Adicionando o safra_geracao para remoção
-    remove_columns = ['safra_geracao']
-
-    # Colunas com um único valor para todas as linhas e que não discrimina nada
-    for column in _df.columns[:-1]:
-        unique = _df[column].unique()
-        if len(unique) == 1:
-            remove_columns.append(column)
-
-    # Removendo colunas
-    _df = _df.drop(columns=remove_columns, axis='columns')
-
-    print(_df.shape)
-    return _df
+    return df_X, df_y
 
 
-# Separando as variáveis por tipo e retornando um dicionário
-def separate_vars(_df):
-    _variables = {
-        'output': ['classe'],
-        'binary': [],
-        'category': ['tmcode'],
-        'num': [],
-        'num_discrete': [],
-        'num_continuous': []
+# Treinando e avaliando o XGBoost
+def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test):
+    # Sem cross-validation
+    print("-> Treinando o XGBoost...")
+    xgboost = XGBClassifier()
+    xgboost.fit(df_X_train, df_y_train)
+    df_y_pred = xgboost.predict(df_X_test)
+
+    print("-> Avaliando o XGBoost com matriz de confusão...")
+    print(pd.DataFrame(confusion_matrix(df_y_test, df_y_pred), columns=['No Churn Pred', 'Churn Pred'],
+                       index=['No Churn Real', 'Churn Real']))
+    print(metrics.classification_report(df_y_test, df_y_pred, digits=5))
+
+    # Com cross-validation
+    print("-> Treinando o XGBoost com cross-validation...")
+    dtrain = xgb.DMatrix(data=df_X_train, label=df_y_train)
+    params = {
+        "objective": "binary:logistic",
+        'colsample_bytree': 0.3,
+        'learning_rate': 0.1,
+        'max_depth': 5,
+        'alpha': 10
     }
-
-    # Separando as variáveis categóricas binárias
-    for column in _df.columns[:-1]:
-        unique = _df[column].unique()
-        if len(unique) == 2:
-            _variables['binary'].append(column)
-
-    # Separando as variáveis categóricas
-    # Buscando por unique values até 100 diferentes, só foram encontradas quantidades e amounts.
-    # A única que ofereceu interesse foi a tmcode que separa a amostra em 48 grupos não ordenados.
-    # for column in _df.columns[:-1]:
-    #     if column not in _variables['binary']:
-    #         unique = _df[column].unique()
-    #         if len(unique) < 100:
-    #             print(f'{column}: {unique}')
-
-    # Separando as variáveis numéricas
-    _variables['num'] = [column for column in _df.columns if
-                         column not in _variables['output'] and
-                         column not in _variables['binary'] and column
-                         not in _variables['category']]
-
-    # Separando as variáveis discretas e contínuas
-    for var in _variables['num']:
-        if isinstance(_df[var][0], np.int64):
-            _variables['num_discrete'].append(var)
-        else:
-            _variables['num_continuous'].append(var)
-
-    return _variables
+    xgb_cv = cv(params=params, dtrain=dtrain, nfold=5, metrics='auc', seed=SEED)
+    print(xgb_cv)
 
 
-# Removendo colunas por porcentagem de zeros
-def remove_zero_columns(_df, _variables, percentage):
-    zeros = []
-    for column in _variables['num']:
-        if len(_df[_df[column] == 0]) / len(_df) > percentage:
-            zeros.append(column)
-
-    _df = _df.drop(columns=zeros, axis='columns')
-
-    for i in zeros:
-        if i in _variables['num']:
-            _variables['num'].remove(i)
-        if i in _variables['num_discrete']:
-            _variables['num_discrete'].remove(i)
-        if i in _variables['num_continuous']:
-            _variables['num_continuous'].remove(i)
-
-    return _df, _variables
+# Treinando e avaliando o SVM
+def create_svm(df_X_train, df_X_test, df_y_train, df_y_test):
+    # TODO
+    pass
 
 
-# Imprime quantidades de variáveis
-def print_variables(_variables):
-    print(f'Tamanho: {len(_variables["output"])} - {_variables["output"]}')
-    print(f'Tamanho: {len(_variables["binary"])} - {_variables["binary"]}')
-    print(f'Tamanho: {len(_variables["category"])} - {_variables["category"]}')
-    print(f'Tamanho: {len(_variables["num"])} - {_variables["num"]}')
-    print(f'Tamanho: {len(_variables["num_discrete"])} - {_variables["num_discrete"]}')
-    print(f'Tamanho: {len(_variables["num_continuous"])} - {_variables["num_continuous"]}')
-
-
-# Removendo outliers com o DBSCAN
-def dbscan_remove_outliers(_df, _variables):
-    selected = _variables['num']
-
-    # Calculando o epsilon
-    # neigh = NearestNeighbors(n_neighbors=len(selected))
-    # nbrs = neigh.fit(_df[selected])
-    #
-    # distances, indices = nbrs.kneighbors(_df[selected])
-    # distances = np.sort(distances, axis=0)
-    # distances = distances[:, 1]
-    #
-    # # Procurar o cotovelo da função, aonde ela já está ficando vertical
-    # plt.figure(figsize=(20, 10))
-    # plt.plot(distances)
-    # plt.title('K-distance Graph', fontsize=20)
-    # plt.xlabel('Data Points sorted by distance', fontsize=14)
-    # plt.ylabel('Epsilon', fontsize=14)
-    # # plt.ylim(0, 10 ** 10)
-    # # plt.xlim(63000, 65000)
-    # plt.show()
-
-    model = DBSCAN(eps=6 * 10 ** 9, min_samples=len(selected) + 1).fit(_df[selected])
-
-    outliers_continuas = _df[model.labels_ == -1]
-    print(len(outliers_continuas))
-
-
-# Realiza a normalização pelo método selecionado
-def normalize(_df, norm_type="MIN_MAX"):
-    scaler = None
-
-    if norm_type == 'MIN_MAX':
-        scaler = MinMaxScaler()
-    elif norm_type == 'Z-SCORE':
-        scaler = StandardScaler()
-
-    return pd.DataFrame(scaler.fit_transform(_df))
-
-
-# Seleção de variáveis
-def variable_selection(_df, _variables, number_of_features=30):
-    x_continuas = _df[_variables['num_continuous']]
-    x_discretas = _df[_variables['num_discrete'] + _variables['binary']]
-    y = _df[_variables['output']]
-
-    # mRMR para entradas contínuas com saída discreta
-    # Instalar
-    # pip install mrmr_selection
-    # pip install polars
-    print(f'mRMR: {mrmr.mrmr_classif(x_continuas, y, K=number_of_features)}\n\n')
-
-    # chi2 para entradas discretas positivas com saída discreta
-    # Tem valores negativos nas discretas que eu não posso utilizar no chi2
-    # print('chi2:')
-    # test = SelectKBest(score_func=chi2, k=number_of_features)
-    # fit = test.fit(x_discretas, y)
-    # np.set_printoptions(precision=3)
-    # print(fit.scores_)
-    # features = fit.transform(x_discretas)
-    # print(features.columns)
-
-    # ReliefF
-    fs = ReliefF(n_neighbors=20, n_features_to_keep=number_of_features)
-    # TODO transformar a x_discretas e o y para array para usar no relief
-    # TODO imprimir o X_train
-    X_train = fs.fit_transform(x_discretas, y)
+# Treinando e avaliando o SVM com AdaBoost
+def create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test):
+    # TODO
+    pass
 
 
 if __name__ == '__main__':
     # Lendo a base de dados e agregando os valores da classe em churn e no-churn
-    df = read_database('base.csv')
+    data = read_database('base.csv')
+    # print(data)
 
-    # Procurando missing values
-    if not missing_values(df):
-        print("Não foram encontrados Missing Values")
-    else:
-        print("Missing value encontrado. Realize o tratamento")
+    # Separando as variáveis de entrada e saída em X e y
+    X = data.drop(columns=['classe'])
+    y = data['classe']
+    # print(X)
+    # print(y)
 
-    # Descartando linhas e colunas que não servem com análise exploratória
-    df = exploratory_data_analysis(df)
+    # Verificando o balanceamento da base
+    # Balanceando a base de dados com undersampling aleatório como passo inicial
+    # Verificando o balanceamento da base após o undersampling
+    # print(data['classe'].value_counts())
+    X, y = balance(X, y)
+    # print(y.value_counts())
 
-    # Separando as variáveis
-    variables = separate_vars(df)
+    # Separando a base em treino e teste, mantendo a base de test balanceada pelo y
+    print("-> Separando a base em treino e teste com proporção de 70/30...")
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, stratify=y, random_state=SEED)
+    # print(f"X_train: {X_train.shape}")
+    # print(f"X_test: {X_test.shape}")
+    # print(f"y_train: {y_train.shape}")
+    # print(f"y_test: {y_test.shape}")
+    # print(f"y_train counts: {y_train.value_counts()}")
+    # print(f"y_test counts: {y_test.value_counts()}")
 
-    # Remover colunas com mais de 40% de zeros. Não pode fazer isso para as binárias
-    df, variables = remove_zero_columns(df, variables, 0.4)
+    # Treinando e avaliando o modelo XGBoost no modo raw
+    create_xgboost(X_train, X_test, y_train, y_test)
 
-    # Imprimir quantidades de variáveis
-    print_variables(variables)
+    # Treinando e avaliando o modelo SVM no modo raw
+    create_svm(X_train, X_test, y_train, y_test)
 
-    # Remover inconsistências
-    # WEKA?
-
-    # Normalização pelo min_max para não retirar os outliers
-    # df = normalize(df)
-
-    # Seleção de variáveis pelos métodos mRMR e chi2
-    variable_selection(df, variables)
-
-    # Removendo outliers pelo DBSCAN
-    # dbscan_remove_outliers(df, variables)
-
-    print(df)
-
-
+    # Treinando e avaliando o modelo SVM no modo raw com AdaBoost
+    create_svm_adaboost(X_train, X_test, y_train, y_test)
