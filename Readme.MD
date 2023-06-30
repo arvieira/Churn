@@ -38,9 +38,13 @@
     - SVM 0.49872
     - SVM com Adaboost 0.50201
 
-- TODO: Verificar o evaluate. A matriz de confusão não está mostrando resultados balanceados. Será que tinha que
-mostrar balanceado o que é real de cada classe? Verificar o y_real para ver se as classes estão balanceadas.
-- TODO: Ver se eu posso avaliar os modelos pelo teste mesmo ou se tinha que usar validação.
+- PAREI AQUI
+  - TODO: Verificar o evaluate. A matriz de confusão não está mostrando resultados balanceados. Será que tinha que
+  mostrar balanceado o que é real de cada classe? Verificar o y_real para ver se as classes estão balanceadas.
+    - O TomekLink não está balanceando corretamente as classes, por isso ele aumentou a performance dos modelos
+    - Verificar pq o tomek link não está fazendo certo
+  - TODO: Ver se eu posso avaliar os modelos pelo teste mesmo ou se tinha que usar validação.
+    - Não preciso me importar com isso, quando colocar o GridSearchCV terá o cross-validation
     
 - Segunda fase (Comparar os resultados a cada etapa com a primeira fase)
   - Aplicar os préprocessamentos já feitos
