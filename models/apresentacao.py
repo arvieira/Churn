@@ -35,4 +35,3 @@ model = grid.best_estimator_
 y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print("Acurácia: %.2f%%" % (accuracy * 100.0))
-
