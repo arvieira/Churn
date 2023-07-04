@@ -1,18 +1,10 @@
 import pandas as pd
 from imblearn.under_sampling import RandomUnderSampler, TomekLinks
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.metrics import confusion_matrix
-from sklearn import metrics
 from sklearn.model_selection import train_test_split
-from xgboost import XGBClassifier, cv
-import xgboost as xgb
-from sklearn import svm
 
-
-# Semente utilizada para reprodutibilidade de experimentos
+from models.constraints import SEED
+from models.xgboost import create_xgboost
 from preprocessing.util import preprocessing
-
-SEED = 7457854
 
 
 # Lê a base de dados, cria a coluna de churn e no-churn como detratores
@@ -65,83 +57,27 @@ def balance_train_test(df, alg='random'):
 def balance(df_X, df_y, alg):
     if alg == 'random':
         print(f"-> Baleanceando a base. Método escolhido: Random...")
-        sampler = RandomUnderSampler(sampling_strategy='majority')
+        return RandomUnderSampler(sampling_strategy='majority').fit_resample(df_X, df_y)
     elif alg == 'tomek':
-        print(f"-> Baleanceando a base. Método escolhido: TomekLink...")
-        sampler = TomekLinks()
+        print(f"-> Baleanceando a base. Método escolhido: TomekLink + Random...")
+        tomek_sampler = TomekLinks(sampling_strategy='majority')
+        tomek_X, tomek_y = tomek_sampler.fit_resample(df_X, df_y)
+        return RandomUnderSampler(sampling_strategy='majority').fit_resample(tomek_X, tomek_y)
     else:
         print('Algoritmo de sampling não conhecido')
         return df_X, df_y
-
-    return sampler.fit_resample(df_X, df_y)
-
-
-# Calcula e imprime a matriz de confusão para um modelo
-def evaluate(alg, real, predicted):
-    print(f"-> Avaliando o {alg} com matriz de confusão...")
-    print(pd.DataFrame(confusion_matrix(real, predicted), columns=['No Churn Pred', 'Churn Pred'],
-                       index=['No Churn Real', 'Churn Real']))
-    print(metrics.classification_report(real, predicted, digits=5))
 
 
 # Executa o treino e a avaliação dos modelos escolhidos
 def train_models(df_X_train, df_X_test, df_y_train, df_y_test):
     # Treinando e avaliando o modelo XGBoost no modo raw
-    create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test)
+    create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=True)
 
     # Treinando e avaliando o modelo SVM no modo raw
-    create_svm(df_X_train, df_X_test, df_y_train, df_y_test)
+    # create_svm(df_X_train, df_X_test, df_y_train, df_y_test)
 
     # Treinando e avaliando o modelo SVM no modo raw com AdaBoost
     # create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test)
-
-
-# Treinando e avaliando o XGBoost
-def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test):
-    # Sem cross-validation
-    print("-> Treinando o XGBoost...")
-    xgboost = XGBClassifier()
-    xgboost.fit(df_X_train, df_y_train)
-    df_y_pred = xgboost.predict(df_X_test)
-    evaluate('XGBoost', df_y_test, df_y_pred)
-
-    # Com cross-validation
-    # print("-> Treinando o XGBoost com cross-validation...")
-    # dtrain = xgb.DMatrix(data=df_X_train, label=df_y_train)
-    # params = {
-    #     "objective": "binary:logistic",
-    #     'colsample_bytree': 0.3,
-    #     'learning_rate': 0.1,
-    #     'max_depth': 5,
-    #     'alpha': 10
-    # }
-    # xgb_cv = cv(params=params, dtrain=dtrain, nfold=5, metrics='auc', seed=SEED)
-    # print(xgb_cv)
-
-
-# Treinando e avaliando o SVM
-def create_svm(df_X_train, df_X_test, df_y_train, df_y_test):
-    # Sem cross-validation
-    print("-> Treinando o SVM...")
-    clf = svm.SVC(kernel='linear', random_state=SEED, max_iter=10000)
-    clf.fit(df_X_train, df_y_train)
-    df_y_pred = clf.predict(df_X_test)
-    evaluate('SVM', df_y_test, df_y_pred)
-
-
-# Treinando e avaliando o SVM com AdaBoost
-def create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test):
-    # Sem cross-validation
-    print("-> Treinando o SVM com AdaBoost...")
-    clf = AdaBoostClassifier(
-        svm.SVC(probability=True, kernel='linear', random_state=SEED, max_iter=5000),
-        n_estimators=50,
-        learning_rate=1.0,
-        algorithm='SAMME'
-    )
-    clf.fit(df_X_train, df_y_train)
-    df_y_pred = clf.predict(df_X_test)
-    evaluate('SVM com AdaBoost', df_y_test, df_y_pred)
 
 
 if __name__ == '__main__':

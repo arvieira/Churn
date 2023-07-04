@@ -1,18 +1,14 @@
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-from models.mlp_model import mlp_model, report
+from karla_models.mlp_model import mlp_model, report
 from preprocessing.bases_variables import CARLOS_ALBERTO
 from preprocessing.sampling import mount_unbalanced_base, smote_equalizer
 from preprocessing.transforming import transform_data
 from sklearn.cluster import DBSCAN
-from sklearn.neighbors import NearestNeighbors
 
 import mrmr
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import chi2
 from ReliefF import ReliefF
 
 

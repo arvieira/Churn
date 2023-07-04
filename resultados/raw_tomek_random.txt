@@ -1,0 +1,43 @@
+- Raw + Random Undersampling + XGBoost:
+               No Churn Pred  Churn Pred
+No Churn Real           4249        3350
+Churn Real              3085        4513
+              precision    recall  f1-score   support
+
+           0    0.57936   0.55915   0.56908      7599
+           1    0.57395   0.59397   0.58379      7598
+
+    accuracy                        0.57656     15197
+   macro avg    0.57666   0.57656   0.57643     15197
+weighted avg    0.57666   0.57656   0.57643     15197
+
+
+
+- Raw + Random Undersampling + SVM:
+               No Churn Pred  Churn Pred
+No Churn Real            104        7495
+Churn Real                99        7499
+              precision    recall  f1-score   support
+
+           0    0.51232   0.01369   0.02666      7599
+           1    0.50013   0.98697   0.66386      7598
+
+    accuracy                        0.50030     15197
+   macro avg    0.50622   0.50033   0.34526     15197
+weighted avg    0.50622   0.50030   0.34524     15197
+
+
+
+
+- Raw + Random Undersampling + SVM com AdaBoosting:
+               No Churn Pred  Churn Pred
+No Churn Real            104        7495
+Churn Real                99        7499
+              precision    recall  f1-score   support
+
+           0    0.51232   0.01369   0.02666      7599
+           1    0.50013   0.98697   0.66386      7598
+
+    accuracy                        0.50030     15197
+   macro avg    0.50622   0.50033   0.34526     15197
+weighted avg    0.50622   0.50030   0.34524     15197

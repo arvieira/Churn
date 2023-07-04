@@ -16,7 +16,7 @@
 - Não foi feita seleção de variáveis. Apenas lançou a base com as 38 selecionadas.
 
 # ROADMAP
-- Primeira fase
+- OK - Primeira fase
   - OK - Ler a base de dados
   - OK - Modificar a variável "classe" de 0, 1 e 2 para 0 ou 1 (no-churn e churn)
     - OK - 0 = churn
@@ -33,18 +33,13 @@
     - OK - Precision
     - OK - Recall
     - OK - F-score
-  - RESULTADOS EM ACURÁCIA:
-    - XGBoost 0.57413
-    - SVM 0.49872
-    - SVM com Adaboost 0.50201
-
-- PAREI AQUI
-  - TODO: Verificar o evaluate. A matriz de confusão não está mostrando resultados balanceados. Será que tinha que
-  mostrar balanceado o que é real de cada classe? Verificar o y_real para ver se as classes estão balanceadas.
-    - O TomekLink não está balanceando corretamente as classes, por isso ele aumentou a performance dos modelos
-    - Verificar pq o tomek link não está fazendo certo
-  - TODO: Ver se eu posso avaliar os modelos pelo teste mesmo ou se tinha que usar validação.
-    - Não preciso me importar com isso, quando colocar o GridSearchCV terá o cross-validation
+    
+- TODO: Fazer o GridSearchCV para SVM e SVM com AdaBoost
+  - Inserir os resultados em preprocessamento_tomek_random_gridsearch_cv
+- TODO: Melhorar o preprocessamento
+  - Fazer seleção de variáveis
+  - Remover outliers
+  - Remover inconsistências
     
 - Segunda fase (Comparar os resultados a cada etapa com a primeira fase)
   - Aplicar os préprocessamentos já feitos
@@ -59,10 +54,9 @@
     - Remover outliers
     - Remover inconsistências
   - OK - Utilizar Tomek link para o undersampling
-    - OK - Obteve uma melhora para o XGBoost e para o SVM. O SVM com AdaBoost ainda não está funcionando direito
-    - RESULTADOS EM ACURÁCIA:
-      - XGBoost 0.64227
-      - SVM 0.55546
-      - SVM com AdaBoost indicou que o weak learner ainda é pior que o aleatório
+    - OK - Obteve uma melhora para o SVM. O SVM com AdaBoost ainda não está funcionando direito
+    - OK - Observação sobre o tomeklink. Ele somente remove os casos da classe majoritária que estão próximos demais
+    da minoritária. Caso não tenha elementos suficientes, ele retorna uma base desbalanceada. 
+    - OK - Utilizar o random para terminar de excluir elementos da classe majoritária e balancear a base.
   - Usar o GridSearchCV para busca de hyperparâmetros
     - O CV do GridSearch já possui o cross-validation
