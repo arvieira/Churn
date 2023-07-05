@@ -33,13 +33,16 @@
     - OK - Precision
     - OK - Recall
     - OK - F-score
-    
-- TODO: Fazer o GridSearchCV para SVM e SVM com AdaBoost
-  - Inserir os resultados em preprocessamento_tomek_random_gridsearch_cv
+   
+- TODO: O SVM não está indo bem, está chutando tudo em uma classe só ou não convergindo
+  - Fazer o modelo do MLP com e sem CV para ver se melhora
 - TODO: Melhorar o preprocessamento
-  - Fazer seleção de variáveis
+  - Avaliar o número de variáveis na seleção de variáveis
   - Remover outliers
   - Remover inconsistências
+- TODO: Fazer o GridSearchCV SVM com AdaBoost
+  - Inserir os resultados em preprocessamento_tomek_random_gridsearch_cv
+
     
 - Segunda fase (Comparar os resultados a cada etapa com a primeira fase)
   - Aplicar os préprocessamentos já feitos

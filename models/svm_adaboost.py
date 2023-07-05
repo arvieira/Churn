@@ -6,12 +6,12 @@ from resultados.evaluator import evaluate
 
 
 # Treinando e avaliando o SVM com AdaBoost
-def create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test):
+def create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=False):
     # Sem cross-validation
     print("-> Treinando o SVM com AdaBoost...")
     clf = AdaBoostClassifier(
-        svm.SVC(probability=True, kernel='linear', random_state=SEED, max_iter=10000),
-        n_estimators=50,
+        svm.SVC(probability=True, kernel='linear', random_state=SEED, max_iter=10000, C=55, gamma=1),
+        n_estimators=55,
         learning_rate=1.0,
         algorithm='SAMME'
     )

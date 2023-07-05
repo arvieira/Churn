@@ -24,7 +24,8 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=Fal
             estimator=model,
             param_grid=params,
             scoring='accuracy',
-            cv=5
+            cv=5,
+            verbose=3
         )
 
         grid.fit(df_X_train, df_y_train)
@@ -35,7 +36,13 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=Fal
     else:
         # Sem cross-validation
         print("-> Treinando o XGBoost...")
-        xgboost = XGBClassifier()
+        xgboost = XGBClassifier(
+            booster='gbtree',
+            eta=0.1,
+            eval_metric='logloss',
+            max_depth=4,
+            n_estimators=55,
+            subsample=0.5)
         xgboost.fit(df_X_train, df_y_train)
 
     df_y_pred = xgboost.predict(df_X_test)

@@ -3,7 +3,9 @@ from imblearn.under_sampling import RandomUnderSampler, TomekLinks
 from sklearn.model_selection import train_test_split
 
 from models.constraints import SEED
+from models.svm_adaboost import create_svm_adaboost
 from models.xgboost import create_xgboost
+from models.svm import create_svm
 from preprocessing.util import preprocessing
 
 
@@ -69,15 +71,28 @@ def balance(df_X, df_y, alg):
 
 
 # Executa o treino e a avaliação dos modelos escolhidos
-def train_models(df_X_train, df_X_test, df_y_train, df_y_test):
+def train_models(df_X_train, df_X_test, df_y_train, df_y_test, models=None):
+    # Colocando os valores padrões
+    if models is None:
+        models = ['xgboost', 'svm', 'svm_ada']
+
     # Treinando e avaliando o modelo XGBoost no modo raw
-    create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=True)
+    if 'xgboost' in models:
+        create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test)
+    if 'xgboost_cv' in models:
+        create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=True)
 
     # Treinando e avaliando o modelo SVM no modo raw
-    # create_svm(df_X_train, df_X_test, df_y_train, df_y_test)
+    if 'svm' in models:
+        create_svm(df_X_train, df_X_test, df_y_train, df_y_test)
+    if 'svm_cv' in models:
+        create_svm(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=True)
 
     # Treinando e avaliando o modelo SVM no modo raw com AdaBoost
-    # create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test)
+    if 'svm_ada' in models:
+        create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test)
+    if 'svm_ada_cv' in models:
+        create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=True)
 
 
 if __name__ == '__main__':
@@ -98,10 +113,10 @@ if __name__ == '__main__':
     #################################################################
 
     # Realizando os preprocessamentos
-    data = preprocessing(data)
+    data = preprocessing(data, 60)
 
     # Balanceando a base e separando treino e teste
     X_train, X_test, y_train, y_test = balance_train_test(data, 'tomek')
 
     # Treinando os modelos com preprocessamento
-    train_models(X_train, X_test, y_train, y_test)
+    train_models(X_train, X_test, y_train, y_test, models=['svm_ada'])
