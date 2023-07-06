@@ -34,14 +34,17 @@
     - OK - Recall
     - OK - F-score
    
-- TODO: O SVM não está indo bem, está chutando tudo em uma classe só ou não convergindo
+
+- CONTINUA RUIM: O SVM não está indo bem, está chutando tudo em uma classe só ou não convergindo
   - Fazer o modelo do MLP com e sem CV para ver se melhora
-- TODO: Melhorar o preprocessamento
+- FEITO: Melhorar o preprocessamento
   - Avaliar o número de variáveis na seleção de variáveis
   - Remover outliers
   - Remover inconsistências
-- TODO: Fazer o GridSearchCV SVM com AdaBoost
+- COM SVM RUIM NÃO TEM PQ FAZER: Fazer o GridSearchCV SVM com AdaBoost
   - Inserir os resultados em preprocessamento_tomek_random_gridsearch_cv
+- TODO: Rodar o xgboost com cv e acertar hyperparametros do mlp
+  - Olhar o resultado da dissertação e começar a escrever
 
     
 - Segunda fase (Comparar os resultados a cada etapa com a primeira fase)

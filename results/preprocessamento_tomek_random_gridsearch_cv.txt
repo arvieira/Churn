@@ -1,0 +1,47 @@
+- Preprocessamento + Random Undersampling + XGBoost:
+{'booster': 'gbtree', 'eta': 0.1, 'eval_metric': 'logloss', 'max_depth': 4, 'n_estimators': 50, 'subsample': 0.5}
+               No Churn Pred  Churn Pred
+No Churn Real           3510        2510
+Churn Real              2361        3659
+              precision    recall  f1-score   support
+
+           0    0.59785   0.58306   0.59036      6020
+           1    0.59313   0.60781   0.60038      6020
+
+    accuracy                        0.59543     12040
+   macro avg    0.59549   0.59543   0.59537     12040
+weighted avg    0.59549   0.59543   0.59537     12040
+
+{'booster': 'gbtree', 'eta': 0.1, 'eval_metric': 'logloss', 'max_depth': 4, 'n_estimators': 55, 'subsample': 0.5}
+               No Churn Pred  Churn Pred
+No Churn Real           3501        2519
+Churn Real              2378        3642
+              precision    recall  f1-score   support
+
+           0    0.59551   0.58156   0.58845      6020
+           1    0.59114   0.60498   0.59798      6020
+
+    accuracy                        0.59327     12040
+   macro avg    0.59332   0.59327   0.59322     12040
+weighted avg    0.59332   0.59327   0.59322     12040
+
+
+
+- Preprocessamento + Random Undersampling + SVM:
+{'C': 55, 'gamma': 1, 'kernel': 'linear', 'max_iter': 10000}
+               No Churn Pred  Churn Pred
+No Churn Real           2597        3423
+Churn Real              2124        3896
+              precision    recall  f1-score   support
+
+           0    0.55010   0.43140   0.48357      6020
+           1    0.53231   0.64718   0.58415      6020
+
+    accuracy                        0.53929     12040
+   macro avg    0.54120   0.53929   0.53386     12040
+weighted avg    0.54120   0.53929   0.53386     12040
+
+
+
+
+- Preprocessamento + Random Undersampling + SVM com AdaBoosting:

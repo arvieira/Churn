@@ -14,7 +14,7 @@ from sklearn.svm import SVC
 
 from pickle import dump
 
-from utils.util import compute_corrected_ttest
+from karla_models.utils import compute_corrected_ttest
 
 
 def support_vector(ds, name):

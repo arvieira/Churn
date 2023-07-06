@@ -14,7 +14,7 @@ from sklearn.model_selection import RepeatedStratifiedKFold, GridSearchCV
 
 from pickle import dump
 
-from utils.util import compute_corrected_ttest
+from karla_models.utils import compute_corrected_ttest
 
 
 def random_florest_model(ds, name):

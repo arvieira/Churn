@@ -17,7 +17,7 @@ import sklearn.metrics as metrics
 from keras import callbacks
 from pickle import dump
 
-from utils.util import compute_corrected_ttest, report
+from karla_models.utils import compute_corrected_ttest, report
 
 
 RANDOM_SEED = 132453

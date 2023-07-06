@@ -2,7 +2,7 @@ from sklearn import svm
 from sklearn.ensemble import AdaBoostClassifier
 
 from models.constraints import SEED
-from resultados.evaluator import evaluate
+from results.evaluator import evaluate
 
 
 # Treinando e avaliando o SVM com AdaBoost

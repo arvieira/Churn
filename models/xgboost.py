@@ -1,6 +1,7 @@
 from sklearn.model_selection import GridSearchCV
 
-from resultados.evaluator import evaluate
+from models.constraints import SEED
+from results.evaluator import evaluate
 from xgboost import XGBClassifier
 
 
@@ -13,11 +14,13 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=Fal
 
         params = {
             'n_estimators': [45, 50, 55],
-            'subsample': [0.25, 0.5],
-            'max_depth': [3, 4],
-            'eta': [0.05, 0.1, 0.2],
+            'subsample': [0.25, 0.5, 1],
+            'max_depth': [3, 4, 5],
+            'eta': [0.05, 0.1, 0.3],
             'booster': ['gbtree'],
-            'eval_metric': ['logloss']
+            'eval_metric': ['logloss'],
+            'nthread': [4],
+            'seed': [SEED]
         }
 
         grid = GridSearchCV(
@@ -36,13 +39,23 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=Fal
     else:
         # Sem cross-validation
         print("-> Treinando o XGBoost...")
+
         xgboost = XGBClassifier(
             booster='gbtree',
-            eta=0.1,
-            eval_metric='logloss',
-            max_depth=4,
-            n_estimators=55,
-            subsample=0.5)
+            learning_rate=0.35,
+            n_estimators=53,
+            max_depth=3,
+            min_child_weight=1,
+            gamma=0,
+            subsample=0.9,
+            colsample_bytree=0.9,
+            objective='multi:softmax',
+            num_class=2,
+            nthread=4,
+            reg_alpha=5e-05,
+            eval_metric='logloss'
+        )
+
         xgboost.fit(df_X_train, df_y_train)
 
     df_y_pred = xgboost.predict(df_X_test)

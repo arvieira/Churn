@@ -2,7 +2,7 @@ from sklearn import svm
 from sklearn.model_selection import GridSearchCV
 
 from models.constraints import SEED
-from resultados.evaluator import evaluate
+from results.evaluator import evaluate
 
 
 # Treinando e avaliando o SVM
