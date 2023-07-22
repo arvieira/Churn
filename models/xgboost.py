@@ -12,15 +12,37 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=Fal
         print("-> Treinando o XGBoost com GridSearch e cross-validation...")
         model = XGBClassifier()
 
+        # params = {
+        #     'booster': ['gbtree'],
+        #     'objective': ['multi:softmax'],
+        #     'num_class': [2],
+        #     'eval_metric': ['logloss'],
+        #     'nthread': [4],
+        #     'seed': [SEED],
+        #     'learning_rate': [0.35],
+        #     'n_estimators': [53],
+        #     'max_depth': [3],
+        #     'min_child_weight': [1],
+        #     'gamma': [0],
+        #     'subsample': [0.9],
+        #     'colsample_bytree': [0.9],
+        #     'reg_alpha': [0.00005],
+        # }
+
         params = {
-            'n_estimators': [45, 50, 55],
-            'subsample': [0.25, 0.5, 1],
-            'max_depth': [3, 4, 5],
-            'eta': [0.05, 0.1, 0.3],
             'booster': ['gbtree'],
+            'objective': ['multi:softmax'],
+            'num_class': [2],
             'eval_metric': ['logloss'],
             'nthread': [4],
-            'seed': [SEED]
+            'learning_rate': [0.01, 0.1, 0.2, 0.3],
+            'n_estimators': [53, 55, 57],
+            'max_depth': [1, 2, 3, 4],
+            'min_child_weight': [1, 2, 3],
+            'gamma': [0, 0.1, 0.01],
+            'subsample': [0.5, 0.7, 0.9],
+            'colsample_bytree': [0.5, 0.7, 0.9],
+            'reg_alpha': [0.00005, 0.0001, 0.0002],
         }
 
         grid = GridSearchCV(
@@ -42,18 +64,18 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=Fal
 
         xgboost = XGBClassifier(
             booster='gbtree',
-            learning_rate=0.35,
-            n_estimators=53,
-            max_depth=3,
+            learning_rate=0.1,
+            n_estimators=55,
+            max_depth=4,
             min_child_weight=1,
             gamma=0,
-            subsample=0.9,
+            subsample=0.5,
             colsample_bytree=0.9,
             objective='multi:softmax',
             num_class=2,
             nthread=4,
             reg_alpha=5e-05,
-            eval_metric='logloss'
+            eval_metric='logloss',
         )
 
         xgboost.fit(df_X_train, df_y_train)

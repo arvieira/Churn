@@ -59,4 +59,4 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = base_split(data)
 
     # Treinando os modelos com preprocessamento
-    train_models(X_train, X_test, y_train, y_test, models=['xgboost'])
+    train_models(X_train, X_test, y_train, y_test, models=['xgboost_cv'])

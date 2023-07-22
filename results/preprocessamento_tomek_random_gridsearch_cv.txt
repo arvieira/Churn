@@ -44,4 +44,16 @@ weighted avg    0.54120   0.53929   0.53386     12040
 
 
 
-- Preprocessamento + Random Undersampling + SVM com AdaBoosting:
+- Preprocessamento + Random Undersampling + MLP:
+{'activation': 'relu', 'alpha': 0.005, 'beta_1': 0.95, 'beta_2': 0.999, 'hidden_layer_sizes': 15, 'learning_rate': 'constant', 'learning_rate_init': 0.001, 'momentum': 0.85, 'nesterovs_momentum': True, 'solver': 'adam'}
+               No Churn Pred  Churn Pred
+No Churn Real           3362        2637
+Churn Real              2398        3600
+              precision    recall  f1-score   support
+
+           0    0.58368   0.56043   0.57182      5999
+           1    0.57720   0.60020   0.58848      5998
+
+    accuracy                        0.58031     11997
+   macro avg    0.58044   0.58031   0.58015     11997
+weighted avg    0.58044   0.58031   0.58015     11997

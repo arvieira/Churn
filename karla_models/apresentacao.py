@@ -8,7 +8,8 @@ from sklearn import datasets
 iris = datasets.load_iris()
 
 # Dividindo a base em treino e teste
-X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=1234513)
+X_train, X_test, y_train, y_test = train_test_split(
+    iris.data, iris.target, test_size=0.3, random_state=1234513, stratify=iris.target)
 
 # Criando o modelo com hyperparâmetros
 model = XGBClassifier()

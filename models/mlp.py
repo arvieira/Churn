@@ -63,11 +63,20 @@ def create_mlp(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=False):
         # Sem cross-validation
         print("-> Treinando o MLP...")
         mlp = MLPClassifier(
+            activation='relu',
+            alpha=0.005,
+            beta_1=0.95,
+            beta_2=0.999,
+            hidden_layer_sizes=15,
+            learning_rate='constant',
+            learning_rate_init=0.001,
+            momentum=0.85,
+            nesterovs_momentum=True,
+            solver='adam',
             batch_size='auto',
             max_iter=500,
             shuffle=True,
             tol=0.0001,
-            nesterovs_momentum=True,
             validation_fraction=0.2,
             early_stopping=True,
             n_iter_no_change=15)
