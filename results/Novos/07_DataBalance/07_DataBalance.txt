@@ -1,0 +1,51 @@
+Usando somente Random para balancear a base
+-> Avaliando o XGBoost com Cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           2361        1636
+Churn Real              3602        5196
+              precision    recall  f1-score   support
+
+           0    0.39594   0.59069   0.47410      3997
+           1    0.76054   0.59059   0.66488      8798
+
+    accuracy                        0.59062     12795
+   macro avg    0.57824   0.59064   0.56949     12795
+weighted avg    0.64664   0.59062   0.60528     12795
+
+-> Valor AUC: 0.629277922865882
+
+
+
+Usando Tomek + Random para balancear a base
+-> Avaliando o XGBoost com Cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           2371        1626
+Churn Real              3639        5159
+              precision    recall  f1-score   support
+
+           0    0.39451   0.59319   0.47387      3997
+           1    0.76035   0.58638   0.66213      8798
+
+    accuracy                        0.58851     12795
+   macro avg    0.57743   0.58979   0.56800     12795
+weighted avg    0.64607   0.58851   0.60332     12795
+
+-> Valor AUC: 0.6281932977352929
+
+
+
+Usando Tomek + SMOTE para balanceara base
+-> Avaliando o XGBoost com Cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           1563        2434
+Churn Real              2289        6509
+              precision    recall  f1-score   support
+
+           0    0.40576   0.39104   0.39827      3997
+           1    0.72783   0.73983   0.73378      8798
+
+    accuracy                        0.63087     12795
+   macro avg    0.56680   0.56544   0.56602     12795
+weighted avg    0.62722   0.63087   0.62897     12795
+
+-> Valor AUC: 0.5983932567520662

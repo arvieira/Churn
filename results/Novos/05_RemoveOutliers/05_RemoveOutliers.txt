@@ -1,0 +1,15 @@
+Removendo outliers com DBSCAN com 400 de epsilon
+-> Avaliando o XGBoost com Cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real            251        3746
+Churn Real               222        8576
+              precision    recall  f1-score   support
+
+           0    0.53066   0.06280   0.11230      3997
+           1    0.69599   0.97477   0.81212      8798
+
+    accuracy                        0.68988     12795
+   macro avg    0.61332   0.51878   0.46221     12795
+weighted avg    0.64434   0.68988   0.59351     12795
+
+-> Valor AUC: 0.6301831397417124

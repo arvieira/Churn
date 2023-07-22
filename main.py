@@ -25,29 +25,35 @@ def read_database(filename):
 
 
 if __name__ == '__main__':
+    # Código para buscar o número de variáveis ótimo
+    # df = []
+    # for i in range(132):
+    #     temp = data
+    #
+    #     # Realizando os preprocessamentos
+    #     data = preprocessing(data, zero_percentage=0.6, n_features=i+1, epsilon=400, normalizer='Z-SCORE')
+    #
+    #     # Separando treino e teste
+    #     X_train, X_test, y_train, y_test = base_split(data)
+    #
+    #     # Treinando os modelos com preprocessamento
+    #     accuracy, auc = train_models(X_train, X_test, y_train, y_test, models=['xgboost'])
+    #     print(f'Número de Variávies: {i+1}')
+    #     df.append([i+1, accuracy, auc])
+    #
+    #     data = temp
+    #
+    # df = pd.DataFrame(df, columns=['Número de Variáveis', 'Acurácia', 'AUC'])
+    # df.to_csv('bases/SelecaoVariaveis.csv', index=False)
+
     if not os.path.exists(PREP_BASE):
         print('-> Não foi encontrada uma base já processada.')
+
         # Lendo a base de dados e agregando os valores da classe em churn e no-churn
         data = read_database(BASE)
-        # print(data)
-
-        #################################################################
-        #             Padrão sem preprocessamento para comparar         #
-        #################################################################
-        # Balanceando a base e separando treino e teste
-        # X_train, X_test, y_train, y_test = balance_train_test(data)
-
-        # Treinando os modelos raw
-        # train_models(X_train, X_test, y_train, y_test)
-        #################################################################
-        #             Padrão sem preprocessamento para comparar         #
-        #################################################################
 
         # Realizando os preprocessamentos
-        data = preprocessing(data, zero_percentage=0.4, n_features=30, epsilon=400, normalizer='Z-SCORE')
-
-        # Balanceando a base
-        data = base_balance(data, 'tomek')
+        data = preprocessing(data, zero_percentage=0.6, n_features=29, epsilon=400, normalizer='MIN_MAX_STD')
 
         # Salvando a base trabalhada para uso futuro
         data.to_csv(PREP_BASE, index=False)
@@ -58,5 +64,8 @@ if __name__ == '__main__':
     # Separando treino e teste
     X_train, X_test, y_train, y_test = base_split(data)
 
+    # Balanceando a base
+    X_train, y_train = base_balance(X_train, y_train, 'smote')
+
     # Treinando os modelos com preprocessamento
-    train_models(X_train, X_test, y_train, y_test, models=['xgboost_cv'])
+    accuracy, auc = train_models(X_train, X_test, y_train, y_test, models=['xgboost_grid'])

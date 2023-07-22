@@ -40,4 +40,5 @@ def create_svm(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=False):
         svm_model.fit(df_X_train, df_y_train)
 
     df_y_pred = svm_model.predict(df_X_test)
-    evaluate('SVM', df_y_test, df_y_pred)
+    pred_proba = svm_model.predict_proba(df_X_test)[::, 1]
+    evaluate('SVM', df_y_test, df_y_pred, pred_proba)

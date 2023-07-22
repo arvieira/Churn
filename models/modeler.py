@@ -12,9 +12,11 @@ def train_models(df_X_train, df_X_test, df_y_train, df_y_test, models=None):
 
     # Treinando e avaliando o modelo XGBoost no modo raw
     if 'xgboost' in models:
-        create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test)
+        return create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test)
     if 'xgboost_cv' in models:
-        create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=True)
+        return create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, cv_type='cv')
+    if 'xgboost_grid' in models:
+        return create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, cv_type='grid_cv')
 
     # Treinando e avaliando o modelo SVM no modo raw
     if 'svm' in models:

@@ -1,0 +1,14 @@
+-> Avaliando o XGBoost com Cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real            256        3757
+Churn Real               212        8634
+              precision    recall  f1-score   support
+
+           0    0.54701   0.06379   0.11426      4013
+           1    0.69680   0.97603   0.81311      8846
+
+    accuracy                        0.69134     12859
+   macro avg    0.62190   0.51991   0.46368     12859
+weighted avg    0.65005   0.69134   0.59501     12859
+
+-> Valor AUC: 0.6332765645948655

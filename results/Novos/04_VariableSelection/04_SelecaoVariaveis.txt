@@ -1,0 +1,46 @@
+Número de Variáveis  Acurácia       AUC
+                 77  0.694222  0.634753
+                 72  0.694066  0.633046
+                 92  0.693911  0.634953
+                 73  0.693911  0.636112
+                100  0.693833  0.635392
+                126  0.693833  0.634714
+                 74  0.693833  0.634218
+                125  0.693833  0.634295
+                 96  0.693833  0.636134
+                118  0.693833  0.636160
+                 88  0.693833  0.634674
+                 67  0.693755  0.634434
+                 36  0.693755  0.629952
+                 59  0.693678  0.633336
+                 80  0.693678  0.633816
+                 86  0.693678  0.636313
+                 89  0.693678  0.633995
+                 79  0.693678  0.634639
+                 31  0.693678  0.629648
+                106  0.693600  0.635727
+                 29  0.693600  0.629904 <=
+                 50  0.693522  0.631956
+                110  0.693522  0.634390
+                 95  0.693444  0.635552
+                121  0.693444  0.637490
+
+Resultado para 29 variáveis
+Há uma queda no desempenho, mas eu preciso reduzir a minha base
+para conseguir trabalhar com ela. Com 77 e 36 variáveis eu ainda tenho um
+ganho de performance.
+
+-> Avaliando o XGBoost com Cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real            234        3779
+Churn Real               180        8666
+              precision    recall  f1-score   support
+
+           0    0.56522   0.05831   0.10571      4013
+           1    0.69634   0.97965   0.81405      8846
+
+    accuracy                        0.69212     12859
+   macro avg    0.63078   0.51898   0.45988     12859
+weighted avg    0.65542   0.69212   0.59300     12859
+
+-> Valor AUC: 0.6282279291376055

@@ -83,4 +83,5 @@ def create_mlp(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=False):
         mlp.fit(df_X_train, df_y_train)
 
     df_y_pred = mlp.predict(df_X_test)
-    evaluate('MLP', df_y_test, df_y_pred)
+    pred_proba = mlp.predict_proba(df_X_test)[::, 1]
+    evaluate('MLP', df_y_test, df_y_pred, pred_proba)

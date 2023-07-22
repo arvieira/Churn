@@ -16,5 +16,7 @@ def create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_searc
         algorithm='SAMME'
     )
     clf.fit(df_X_train, df_y_train)
+
     df_y_pred = clf.predict(df_X_test)
-    evaluate('SVM com AdaBoost', df_y_test, df_y_pred)
+    pred_proba = clf.predict_proba(df_X_test)[::, 1]
+    evaluate('SVM com AdaBoost', df_y_test, df_y_pred, pred_proba)

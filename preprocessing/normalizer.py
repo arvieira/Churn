@@ -5,10 +5,12 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 def normalize(df, variables, norm_type):
     scaler = None
 
-    if norm_type == 'MIN_MAX':
+    if norm_type == 'MIN_MAX_STD':
+        print("\t-> Realizando normalização por Min-Max.")
+        scaler = MinMaxScaler()
+    elif norm_type == 'MIN_MAX':
         print("\t-> Realizando normalização por Min-Max.")
         scaler = MinMaxScaler(feature_range=(-1, 1))
-        # scaler = MinMaxScaler()
     elif norm_type == 'Z-SCORE':
         print("\t-> Realizando normalização por Z-score.")
         scaler = StandardScaler()
