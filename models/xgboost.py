@@ -19,15 +19,15 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, cv_type='simple
         #     'num_class': [2],
         #     'eval_metric': ['logloss'],
         #     'nthread': [4],
-        #     'seed': [SEED],
-        #     'learning_rate': [0.35],
-        #     'n_estimators': [53],
-        #     'max_depth': [3],
-        #     'min_child_weight': [1],
-        #     'gamma': [0],
-        #     'subsample': [0.9],
-        #     'colsample_bytree': [0.9],
-        #     'reg_alpha': [0.00005],
+        #     'learning_rate': [0.01, 0.1],
+        #     'n_estimators': [53, 55],
+        #     'max_depth': [3, 4],
+        #     'min_child_weight': [1, 2],
+        #     'gamma': [0, 0.1],
+        #     'subsample': [0.5, 0.7],
+        #     'colsample_bytree': [0.7, 0.9],
+        #     'reg_alpha': [0.00005, 0.0001],
+        #     'seed': [SEED]
         # }
 
         params = {
@@ -36,14 +36,14 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, cv_type='simple
             'num_class': [2],
             'eval_metric': ['logloss'],
             'nthread': [4],
-            'learning_rate': [0.01, 0.1],
-            'n_estimators': [53, 55],
-            'max_depth': [3, 4],
-            'min_child_weight': [1, 2],
-            'gamma': [0, 0.1],
-            'subsample': [0.5, 0.7],
-            'colsample_bytree': [0.7, 0.9],
-            'reg_alpha': [0.00005, 0.0001],
+            'learning_rate': [0.15, 0.1],
+            'n_estimators': [54, 55, 56],
+            'max_depth': [4],
+            'min_child_weight': [3, 2],
+            'gamma': [0, 0.01],
+            'subsample': [0.5, 0.6, 0.4],
+            'colsample_bytree': [0.8, 0.9, 1],
+            'reg_alpha': [0.00005, 0.00001],
             'seed': [SEED]
         }
 
