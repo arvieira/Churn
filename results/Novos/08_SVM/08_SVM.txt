@@ -1,0 +1,31 @@
+-> Avaliando o SVM com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           2355        1642
+Churn Real              4384        4414
+              precision    recall  f1-score   support
+
+           0    0.34946   0.58919   0.43871      3997
+           1    0.72886   0.50170   0.59432      8798
+
+    accuracy                        0.52903     12795
+   macro avg    0.53916   0.54545   0.51651     12795
+weighted avg    0.61034   0.52903   0.54571     12795
+
+-> Valor AUC: 0.5618498228069778
+
+
+
+-> Avaliando o SVM com AdaBoost com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           2110        1887
+Churn Real              4074        4724
+              precision    recall  f1-score   support
+
+           0    0.34120   0.52790   0.41450      3997
+           1    0.71457   0.53694   0.61315      8798
+
+    accuracy                        0.53411     12795
+   macro avg    0.52788   0.53242   0.51382     12795
+weighted avg    0.59793   0.53411   0.55109     12795
+
+-> Valor AUC: 0.5324180678131922

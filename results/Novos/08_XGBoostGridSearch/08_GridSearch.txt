@@ -1,0 +1,196 @@
+{
+    'booster': 'gbtree',
+    'colsample_bytree': 0.9,
+    'eval_metric': 'logloss',
+    'gamma': 0,
+    'learning_rate': 0.1,
+    'max_depth': 4,
+    'min_child_weight': 2,
+    'n_estimators': 55,
+    'nthread': 4,
+    'num_class': 2,
+    'objective':
+    'multi:softmax',
+    'reg_alpha': 5e-05,
+    'seed': 7457854,
+    'subsample': 0.5
+}
+-> Avaliando o XGBoost com GridSearch e cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           1557        2440
+Churn Real              2346        6452
+              precision    recall  f1-score   support
+
+           0    0.39892   0.38954   0.39418      3997
+           1    0.72560   0.73335   0.72945      8798
+
+    accuracy                        0.62595     12795
+   macro avg    0.56226   0.56145   0.56181     12795
+weighted avg    0.62355   0.62595   0.62472     12795
+
+-> Valor AUC: 0.5968805570988881
+
+
+
+{
+    'booster': 'gbtree',
+    'colsample_bytree': 0.8,
+    'eval_metric': 'logloss',
+    'gamma': 0.01,
+    'learning_rate': 0.15,
+    'max_depth': 4,
+    'min_child_weight': 3,
+    'n_estimators': 56,
+    'nthread': 4,
+    'num_class': 2,
+    'objective': 'multi:softmax',
+    'reg_alpha': 5e-05,
+    'seed': 7457854,
+    'subsample': 0.6
+}
+-> Avaliando o XGBoost com GridSearch e cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           1495        2502
+Churn Real              2178        6620
+              precision    recall  f1-score   support
+
+           0    0.40702   0.37403   0.38983      3997
+           1    0.72572   0.75244   0.73884      8798
+
+    accuracy                        0.63423     12795
+   macro avg    0.56637   0.56324   0.56433     12795
+weighted avg    0.62616   0.63423   0.62981     12795
+
+-> Valor AUC: 0.5998273426597569
+
+
+
+{
+    'booster': 'gbtree',
+    'colsample_bytree': 0.8,
+    'eval_metric': 'logloss',
+    'gamma': 0.1,
+    'learning_rate': 0.2,
+    'max_depth': 4,
+    'min_child_weight': 3,
+    'n_estimators': 57,
+    'nthread': 4,
+    'num_class': 2,
+    'objective': 'multi:softmax',
+    'reg_alpha': 5e-05,
+    'seed': 7457854,
+    'subsample': 0.6
+}
+-> Avaliando o XGBoost com GridSearch e cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           1425        2572
+Churn Real              2045        6753
+              precision    recall  f1-score   support
+
+           0    0.41066   0.35652   0.38168      3997
+           1    0.72418   0.76756   0.74524      8798
+
+    accuracy                        0.63916     12795
+   macro avg    0.56742   0.56204   0.56346     12795
+weighted avg    0.62624   0.63916   0.63167     12795
+
+-> Valor AUC: 0.6009149110070788
+
+
+
+{
+    'booster': 'gbtree',
+    'colsample_bytree': 0.9,
+    'eval_metric': 'logloss',
+    'gamma': 0.01,
+    'learning_rate': 0.25,
+    'max_depth': 4,
+    'min_child_weight': 3,
+    'n_estimators': 56,
+    'nthread': 4,
+    'num_class': 2,
+    'objective': 'multi:softmax',
+    'reg_alpha': 5e-05,
+    'seed': 7457854,
+    'subsample': 0.6
+}
+-> Avaliando o XGBoost com GridSearch e cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           1383        2614
+Churn Real              1994        6804
+              precision    recall  f1-score   support
+
+           0    0.40954   0.34601   0.37510      3997
+           1    0.72245   0.77336   0.74704      8798
+
+    accuracy                        0.63986     12795
+   macro avg    0.56599   0.55968   0.56107     12795
+weighted avg    0.62470   0.63986   0.63085     12795
+
+-> Valor AUC: 0.5981798379928388
+
+
+
+{
+    'booster': 'gbtree',
+    'colsample_bytree': 1,
+    'eval_metric': 'logloss',
+    'gamma': 0.001,
+    'learning_rate': 0.3,
+    'max_depth': 4,
+    'min_child_weight': 3,
+    'n_estimators': 57,
+    'nthread': 4,
+    'num_class': 2,
+    'objective': 'multi:softmax',
+    'reg_alpha': 5e-05,
+    'seed': 7457854,
+    'subsample': 0.6
+}
+-> Avaliando o XGBoost com GridSearch e cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           1327        2670
+Churn Real              1915        6883
+              precision    recall  f1-score   support
+
+           0    0.40932   0.33200   0.36663      3997
+           1    0.72051   0.78234   0.75015      8798
+
+    accuracy                        0.64166     12795
+   macro avg    0.56491   0.55717   0.55839     12795
+weighted avg    0.62329   0.64166   0.63034     12795
+
+-> Valor AUC: 0.595341752392949
+
+
+
+{
+    'booster': 'gbtree',
+    'colsample_bytree': 1,
+    'eval_metric': 'logloss',
+    'gamma': 0.0001,
+    'learning_rate': 0.35,
+    'max_depth': 4,
+    'min_child_weight': 3,
+    'n_estimators': 58,
+    'nthread': 4,
+    'num_class': 2,
+    'objective': 'multi:softmax',
+    'reg_alpha': 5e-05,
+    'seed': 7457854,
+    'subsample': 0.6
+}
+-> Avaliando o XGBoost com GridSearch e cross-validation com matriz de confusão...
+               No Churn Pred  Churn Pred
+No Churn Real           1303        2694
+Churn Real              1801        6997
+              precision    recall  f1-score   support
+
+           0    0.41978   0.32599   0.36699      3997
+           1    0.72201   0.79529   0.75688      8798
+
+    accuracy                        0.64869     12795
+   macro avg    0.57090   0.56064   0.56194     12795
+weighted avg    0.62760   0.64869   0.63509     12795
+
+-> Valor AUC: 0.5990328874184623

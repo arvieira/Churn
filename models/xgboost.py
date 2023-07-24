@@ -30,20 +30,88 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, cv_type='simple
         #     'seed': [SEED]
         # }
 
+        # params = {
+        #     'booster': ['gbtree'],
+        #     'objective': ['multi:softmax'],
+        #     'num_class': [2],
+        #     'eval_metric': ['logloss'],
+        #     'nthread': [4],
+        #     'learning_rate': [0.15, 0.1],
+        #     'n_estimators': [54, 55, 56],
+        #     'max_depth': [4],
+        #     'min_child_weight': [3, 2],
+        #     'gamma': [0, 0.01],
+        #     'subsample': [0.5, 0.6, 0.4],
+        #     'colsample_bytree': [0.8, 0.9, 1],
+        #     'reg_alpha': [0.00005, 0.00001],
+        #     'seed': [SEED]
+        # }
+
+        # params = {
+        #     'booster': ['gbtree'],
+        #     'objective': ['multi:softmax'],
+        #     'num_class': [2],
+        #     'eval_metric': ['logloss'],
+        #     'nthread': [4],
+        #     'learning_rate': [0.15, 0.2],
+        #     'n_estimators': [55, 56, 57],
+        #     'max_depth': [4],
+        #     'min_child_weight': [3, 4],
+        #     'gamma': [0.1, 0.01, 0.001],
+        #     'subsample': [0.6, 0.7],
+        #     'colsample_bytree': [0.7, 0.8],
+        #     'reg_alpha': [0.00005],
+        #     'seed': [SEED]
+        # }
+
+        # params = {
+        #     'booster': ['gbtree'],
+        #     'objective': ['multi:softmax'],
+        #     'num_class': [2],
+        #     'eval_metric': ['logloss'],
+        #     'nthread': [4],
+        #     'learning_rate': [0.15, 0.2, 0.25],
+        #     'n_estimators': [56, 57, 58],
+        #     'max_depth': [4],
+        #     'min_child_weight': [3],
+        #     'gamma': [0.1, 0.01],
+        #     'subsample': [0.6],
+        #     'colsample_bytree': [0.8, 0.9],
+        #     'reg_alpha': [0.00005],
+        #     'seed': [SEED]
+        # }
+
+        # params = {
+        #     'booster': ['gbtree'],
+        #     'objective': ['multi:softmax'],
+        #     'num_class': [2],
+        #     'eval_metric': ['logloss'],
+        #     'nthread': [4],
+        #     'learning_rate': [0.25, 0.3],
+        #     'n_estimators': [55, 56, 57],
+        #     'max_depth': [4],
+        #     'min_child_weight': [3],
+        #     'gamma': [0.01, 0.001],
+        #     'subsample': [0.6],
+        #     'colsample_bytree': [0.9, 1],
+        #     'reg_alpha': [0.00005],
+        #     'seed': [SEED]
+        # }
+
         params = {
             'booster': ['gbtree'],
             'objective': ['multi:softmax'],
             'num_class': [2],
             'eval_metric': ['logloss'],
             'nthread': [4],
-            'learning_rate': [0.15, 0.1],
-            'n_estimators': [54, 55, 56],
+            'learning_rate': [0.3, 0.35],
+            'n_estimators': [56, 57, 58],
             'max_depth': [4],
-            'min_child_weight': [3, 2],
-            'gamma': [0, 0.01],
-            'subsample': [0.5, 0.6, 0.4],
-            'colsample_bytree': [0.8, 0.9, 1],
-            'reg_alpha': [0.00005, 0.00001],
+            'min_child_weight': [3],
+            'gamma': [0.001, 0.0001],
+            'subsample': [0.6],
+            'colsample_bytree': [1],
+            'reg_alpha': [0.00005],
             'seed': [SEED]
         }
 

@@ -8,7 +8,7 @@ from models.xgboost import create_xgboost
 def train_models(df_X_train, df_X_test, df_y_train, df_y_test, models=None):
     # Colocando os valores padrões
     if models is None:
-        models = ['xgboost', 'mlp', 'svm', 'svm_ada']
+        models = ['xgboost']
 
     # Treinando e avaliando o modelo XGBoost no modo raw
     if 'xgboost' in models:
@@ -22,13 +22,13 @@ def train_models(df_X_train, df_X_test, df_y_train, df_y_test, models=None):
     if 'svm' in models:
         create_svm(df_X_train, df_X_test, df_y_train, df_y_test)
     if 'svm_cv' in models:
-        create_svm(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=True)
+        create_svm(df_X_train, df_X_test, df_y_train, df_y_test, cv_type='cv')
+    if 'svm_grid' in models:
+        create_svm(df_X_train, df_X_test, df_y_train, df_y_test, cv_type='grid_cv')
 
     # Treinando e avaliando o modelo SVM no modo raw com AdaBoost
     if 'svm_ada' in models:
         create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test)
-    if 'svm_ada_cv' in models:
-        create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_search=True)
 
     # Treinando e avaliando o modelo MPL no modo raw
     if 'mlp' in models:

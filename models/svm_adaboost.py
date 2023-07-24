@@ -10,7 +10,7 @@ def create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_searc
     # Sem cross-validation
     print("-> Treinando o SVM com AdaBoost...")
     clf = AdaBoostClassifier(
-        svm.SVC(probability=True, kernel='linear', random_state=SEED, max_iter=10000, C=55, gamma=1),
+        svm.SVC(probability=True, kernel='rbf', random_state=SEED, max_iter=10000, C=1, gamma=1),
         n_estimators=55,
         learning_rate=1.0,
         algorithm='SAMME'
@@ -19,4 +19,4 @@ def create_svm_adaboost(df_X_train, df_X_test, df_y_train, df_y_test, grid_searc
 
     df_y_pred = clf.predict(df_X_test)
     pred_proba = clf.predict_proba(df_X_test)[::, 1]
-    evaluate('SVM com AdaBoost', df_y_test, df_y_pred, pred_proba)
+    return evaluate('SVM com AdaBoost', df_y_test, df_y_pred, pred_proba)
