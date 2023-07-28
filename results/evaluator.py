@@ -30,7 +30,7 @@ def evaluate(alg, real, predicted, pred_proba):
     print(f"-> Valor AUC: {metrics.roc_auc_score(real, pred_proba)}")
 
     # Exibindo a matriz de confusão para colocar no artigo
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['Churn', 'No Churn'])
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['No Churn', 'Churn'])
     disp.plot()
     plt.show()
 
