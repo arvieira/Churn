@@ -68,4 +68,4 @@ if __name__ == '__main__':
     X_train, y_train = base_balance(X_train, y_train, 'smote')
 
     # Treinando os modelos com preprocessamento
-    accuracy, auc = train_models(X_train, X_test, y_train, y_test, models=['svm_ada'])
+    accuracy, auc = train_models(X_train, X_test, y_train, y_test, models=['xgboost_cv'])

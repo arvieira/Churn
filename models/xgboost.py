@@ -2,7 +2,9 @@ from sklearn.model_selection import GridSearchCV, RepeatedStratifiedKFold, cross
 
 from models.constraints import SEED, K_CV, N_REPEATS
 from results.evaluator import evaluate
-from xgboost import XGBClassifier
+from xgboost import XGBClassifier, plot_importance
+
+import pandas as pd
 
 
 # Treinando e avaliando o XGBoost
@@ -154,6 +156,15 @@ def create_xgboost(df_X_train, df_X_test, df_y_train, df_y_test, cv_type='simple
             xgboost, df_X_train, df_y_train, cv=cv, scoring='accuracy', return_train_score=True, return_estimator=True)
 
         estimator = results['estimator'][results['train_score'].argmax(axis=0)]
+
+        plot_importance(
+            estimator,
+            title='Importância das Variáveis para o XGBoost',
+            xlabel='F-score',
+            ylabel='Variáveis',
+            grid=False
+        )
+
         df_y_pred = estimator.predict(df_X_test)
         pred_proba = estimator.predict_proba(df_X_test)[::, 1]
         return evaluate(alg, df_y_test, df_y_pred, pred_proba)
